@@ -6,11 +6,13 @@ import json
 # import pdb; pdb.set_trace()
 
 instrumentStateFile = sys.argv[1] + '\\InstrumentState.xml'
+# instrumentStateFile = 'C:\\Projects\\State\\InstrumentState.xml'
+
 drawers = {'left': 0, 'right': 1}
 reagentNames = ['A', 'C', 'T', 'G', 'A-', 'C-', 'T-', 'G-', 'Wash', 'Cleave', 'MiniWash']
 
 # Load config.json data into a dictionary
-def loadData() -> dict:
+def loadConfigData() -> dict:
     try:
         with open("config.json", 'r') as file:
             config = json.load(file)
@@ -66,27 +68,22 @@ def stripDecimal(value) -> float:
     return float(f"0.{four_digits}")  # Format it as '0.xxxx'
 
 
+# Return number of whole digits
+def countWholeDigits(s):
+    integer_part = s.split('.')[0]
+    return sum(c.isdigit() for c in integer_part)
+
+
 # create new reagent data string based on new volume calculations
-def generateNewWashHeader(reagent, volumeList) -> str:
+def generateNewWashHeader(reagentName, volumeList) -> str:
     for volumeHeader in volumeList:  # Iterate through all headers in volume list
         volumeList[volumeHeader] = f"{volumeList[volumeHeader]:.4f}"  # Ensure header has 4 decimal digits
         volumeList[volumeHeader] = str(volumeList[volumeHeader])
-        while len(volumeList[volumeHeader]) < 9:  # Set spacing between each value correctly
+        while len(volumeList[volumeHeader]) < 9 and volumeHeader != 'initial':  # Set spacing between each value correctly, except space between reagent name and initial
             volumeList[volumeHeader] = ' ' + volumeList[volumeHeader]
-
-    reagentName = reagent
-    if reagentName in ['A', 'C', 'G', 'T']:
-        reagentName += ' ' * 10
-    elif reagentName in ['A-', 'C-', 'G-']:
-        reagentName += ' ' * 9
-    elif reagentName == 'T-':
-        reagentName += ' ' * 9
-    elif reagentName == 'Wash':
-        reagentName += ' ' * 7
-    elif reagentName == 'Cleave':
-        reagentName += ' ' * 5
-    elif reagentName == 'MiniWash':
-        reagentName += ' ' * 3
+    digits = countWholeDigits(volumeList['initial'])-3  # Set spacing between reagent name and initial
+    while len(reagentName) + digits < 12:
+        reagentName += ' '
 
     return (f"{reagentName}"
             f"{volumeList['initial']}   {volumeList['usable']}   {volumeList['used']}   "
@@ -94,8 +91,7 @@ def generateNewWashHeader(reagent, volumeList) -> str:
             f"{volumeList['reserved']}")
 
 
-data = loadData()
-
+data = loadConfigData()
 for drawer in drawers:
     percent = -1
     if data["randomPercent"]:
