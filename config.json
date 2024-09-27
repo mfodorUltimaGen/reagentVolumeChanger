@@ -1,6 +1,26 @@
 {
   "randomPercent" : false,
+  "initialA": 83.0000,
+  "initialC": 83.0000,
+  "initialG": 83.0000,
+  "initialT": 83.0000,
+  "initialA-": 83.0000,
+  "initialC-": 83.0000,
+  "initialG-": 83.0000,
+  "initialT-": 123.0000,
   "initialWash": 1950.0000,
-  "usableWash": 1925.0000,
-  "washDecimal": 0.7903
+  "initialCleave": 140.0000,
+  "initialMiniWash": 400.0000,
+
+  "usableA": 80.0634,
+  "usableC": 80.0683,
+  "usableG": 80.1030,
+  "usableT": 80.1109,
+  "usableA-": 80.1366,
+  "usableC-": 80.0238,
+  "usableG-": 80.0357,
+  "usableT-": 80.9743,
+  "usableWash": 1925.7903,
+  "usableCleave": 137.0785,
+  "usableMiniWash": 387.9170
   }
