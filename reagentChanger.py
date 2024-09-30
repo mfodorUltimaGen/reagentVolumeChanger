@@ -8,7 +8,7 @@ import json
 instrumentStateFile = sys.argv[1] + '\\InstrumentState.xml'
 # instrumentStateFile = 'C:\\Projects\\State\\InstrumentState.xml'
 
-drawers = {'left': 0, 'right': 1}
+drawers = {'Left': 0, 'Right': 1}
 reagentNames = ['A', 'C', 'T', 'G', 'A-', 'C-', 'T-', 'G-', 'Wash', 'Cleave', 'MiniWash']
 
 # Load config.json data into a dictionary
@@ -33,9 +33,8 @@ def parseInstrumentState(reagentName, reagentData, reagentDrawer):
                 reagent.attrib['Volumes'] = reagentData
                 break
         else:
-            print("No reagent with Volumes found.")
+            print(f"No reagent with Volumes found for {reagentName}.")
         tree.write(instrumentStateFile)
-        print("Changes saved to the XML file.")
         return
 
     except ET.ParseError:
@@ -97,9 +96,9 @@ for drawer in drawers:
     if data["randomPercent"]:
         percent = randint(0, 100)
     else:
-        while not (percent.is_integer() and 0 <= percent <= 100):
-            percent = int(input(f'Enter {drawer} reagent volume percent, as an integer (0-100)\n'))
+        percent = int(input(f'Enter required *{drawer} Reagent* volume percent, as an integer (0-100)\n'))
     for reagentName in reagentNames:
         volumeList = calculateNewVolume(reagentName, percent)
         reagentString = generateNewWashHeader(reagentName, volumeList)
         parseInstrumentState(reagentName, reagentString, drawers[drawer])
+    print(f"{drawer} Reagent Drawer changes saved to {instrumentStateFile}.\n\n")
