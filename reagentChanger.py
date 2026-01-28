@@ -52,7 +52,7 @@ def parse_instrument_state(reagent_name, reagent_data, reagent_drawer):
 
 
 # Calculate new wash header volumes based on percent input
-def calculateNewVolume(reagent_name, percent) -> dict:
+def calculate_new_volume(reagent_name, percent) -> dict:
     volume_list = {'initial': 0.0000, 'usable': 0.0000, 'used': 0.0000, 'past': 0.0000, 'current': 0.0000,
                   'available': 0.0000, 'reserved': 0.0000}
 
@@ -113,7 +113,7 @@ for drawer in drawers:
             continue
     # For each reagent, update the values for this specific drawer
     for reagent_name in reagent_names:
-        volume_list = calculateNewVolume(reagent_name, percent)
+        volume_list = calculate_new_volume(reagent_name, percent)
         reagentString = generate_new_wash_header(reagent_name, volume_list)
         parse_instrument_state(reagent_name, reagentString, drawers[drawer])
 
